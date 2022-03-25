@@ -1,0 +1,52 @@
+.orders-bg-container 
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.li-item
+{
+    list-style-type: none;
+    margin-bottom: 10px;
+}
+.order-item-container 
+{
+    display:  flex;
+    flex-direction: column;
+    border: 1px solid #c2c2c2;
+    width: 90vw;
+    padding: 10px;
+}
+
+.orders-img 
+{
+    height: 120px;
+    width: 120px;
+    margin-right: 20px;
+}
+
+.above-section
+{
+    display: flex;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #c2c2c2;
+    width:90vw;
+}
+
+.below-section 
+{
+    display: flex;
+    justify-content: space-between;
+}
+.display-type 
+{
+    display: flex;
+    justify-content: space-between;
+}
+
+.status-btn 
+{
+    height: 30px;
+    width: 120px;
+    cursor: pointer;
+}
