@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import './index.css'
-
+import Header from '../Header'
+import { Cookies } from 'typescript-cookie'
 
 type obj={
         id:number,
@@ -37,11 +38,21 @@ const Cart=()=>{
 
     const [cart,setCart]=useState<obj[]>([])
 
-    
+    const options={
+        method: 'GET',
+        headers: {
+            'content-type': 'application/json',
+            'accept':'application/json',
+            'Access-Control-Allow-Origin':"*",
+            'Authorization':`bearer ${Cookies.get("jwt_token")}`
+        }
+    }
 
     useEffect(()=>{
+
         setState(status.loading)
-        fetch("http://localhost:3001/getcart/").then((res)=>{
+
+        fetch("http://localhost:3001/getcart/",options).then((res)=>{
             return res.json()
         }).then((data)=>{
             //console.log(data)
@@ -49,9 +60,6 @@ const Cart=()=>{
             setState(status.success)
         })
     },[])
-
-    
-
 
     const isEmpty=cart.length===0?true:false
     
@@ -71,7 +79,9 @@ const Cart=()=>{
     const renderCart=()=>{
         //console.log(cart,"updated")
         return (
-            <>
+            <>{
+                <Header/>
+            }
             <div className='cart-bg-container'>
             {
                 isEmpty && 
@@ -132,13 +142,14 @@ const Cart=()=>{
                                                 'content-type': 'application/json',
                                                 'accept':'application/json',
                                                 'Access-Control-Allow-Origin':"*",
+                                                'Authorization':`bearer ${Cookies.get("jwt_token")}`
                                             },
                                             data:JSON.stringify(data)}).then((res)=>console.log(res)).catch((err)=>console.log(err))
                                                     
                                         // console.log(eachItem,"+++++")
                                         
                                     
-                                        await fetch("http://localhost:3001/getcart").then((res)=>{
+                                        await fetch("http://localhost:3001/getcart",options).then((res)=>{
                                             return res.json()
                                         }).then((data)=>{
                                             setCart(data)
@@ -162,6 +173,7 @@ const Cart=()=>{
                                                 'content-type': 'application/json',
                                                 'accept':'application/json',
                                                 'Access-Control-Allow-Origin':"*",
+                                                'Authorization':`bearer ${Cookies.get("jwt_token")}`
                                             },
                                             data:JSON.stringify(data)}).then((res)=>console.log(res)).catch((err)=>console.log(err))                                        
                                     }
@@ -177,6 +189,7 @@ const Cart=()=>{
                                                 'content-type': 'application/json',
                                                 'accept':'application/json',
                                                 'Access-Control-Allow-Origin':"*",
+                                                'Authorization':`bearer ${Cookies.get("jwt_token")}`
                                             },
                                         data:JSON.stringify(data)}).then((res)=>console.log(res)).catch((err)=>console.log(err))    
                                     }  
@@ -190,11 +203,12 @@ const Cart=()=>{
                                                 'content-type': 'application/json',
                                                 'accept':'application/json',
                                                 'Access-Control-Allow-Origin':"*",
+                                                'Authorization':`bearer ${Cookies.get("jwt_token")}`
                                             },
                                         data:JSON.stringify(data)}).then((res)=>console.log(res)).catch((err)=>console.log(err))    
                                     }
                                         
-                                    await fetch("http://localhost:3001/getcart").then((res)=>{
+                                    await fetch("http://localhost:3001/getcart",options).then((res)=>{
                                         return res.json()
                                         }).then((data)=>{
                                             setCart(data)
@@ -216,13 +230,14 @@ const Cart=()=>{
                                                 'content-type': 'application/json',
                                                 'accept':'application/json',
                                                 'Access-Control-Allow-Origin':"*",
+                                                'Authorization':`bearer ${Cookies.get("jwt_token")}`
                                             },
                                             data:JSON.stringify(data)}).then((res)=>console.log(res)).catch((err)=>console.log(err))
                                                     
                                         // console.log(eachItem,"+++++")
                                         
                                     
-                                        await fetch("http://localhost:3001/getcart").then((res)=>{
+                                        await fetch("http://localhost:3001/getcart",options).then((res)=>{
                                             return res.json()
                                         }).then((data)=>{
                                             setCart(data)
@@ -248,6 +263,7 @@ const Cart=()=>{
                                                 'content-type': 'application/json',
                                                 'accept':'application/json',
                                                 'Access-Control-Allow-Origin':"*",
+                                                'Authorization':`bearer ${Cookies.get("jwt_token")}`
                                             }
                                             }).then((res)=>{
                                                 console.log(res)
@@ -256,6 +272,7 @@ const Cart=()=>{
                                         
                                         
                                     }}>REMOVE</button>
+                                    <input type="checkbox" className='checkbox'/>
                                 </div>
                             </div>
                         </li>)
@@ -345,12 +362,12 @@ const Cart=()=>{
                                     'content-type': 'application/json',
                                     'accept':'application/json',
                                     'Access-Control-Allow-Origin':"*",
+                                    'Authorization':`bearer ${Cookies.get("jwt_token")}`
                                 },
                                 data:JSON.stringify(data1)
                             })
                             return eachItem
                         })
-
                         
                         console.log(newOrders,"newly added")    
 
@@ -361,20 +378,23 @@ const Cart=()=>{
                                 'content-type': 'application/json',
                                 'accept':'application/json',
                                 'Access-Control-Allow-Origin':"*",
+                                'Authorization':`bearer ${Cookies.get("jwt_token")}`
                             },
                             data:JSON.stringify(eachItem)
                             }).then(()=>console.log("it's done")).catch((err)=>console.log("err"))
                         })
                         
                         
-
-                        await axios("http://localhost:3001/deletecart/",{
+                        newOrders.map(async(each)=>{
+                            await axios(`http://localhost:3001/deletecartitem/${each.id}`,{
                                     method: 'DELETE',
                                     headers: {
                                     'content-type': 'application/json',
                                     'accept':'application/json',
-                                    'Access-Control-Allow-Origin':"*",                                        }
-                        }).then((res)=>console.log(res)).catch((err)=>console.log(err)) 
+                                    'Access-Control-Allow-Origin':"*",
+                                    'Authorization':`bearer ${Cookies.get("jwt_token")}`                                       }
+                            }).then((res)=>console.log(res)).catch((err)=>console.log(err)) 
+                        })
                         
                         const userData={
                             name,
@@ -382,18 +402,21 @@ const Cart=()=>{
                             phone
                         }
 
+                        console.log(userData);
+
                         await axios("http://localhost:3001/adduser/",{
                                     method: 'POST',
                                     headers: {
                                     'content-type': 'application/json',
                                     'accept':'application/json',
                                     'Access-Control-Allow-Origin':"*", 
-                                data:JSON.stringify(userData)                                       }
+                                    'Authorization':`bearer ${Cookies.get("jwt_token")}`
+                                },
+                                data:JSON.stringify(userData)  
                         })
-                        
-
                         setCart([])
                     }
+                    
                 }}>PLACE ORDER</button>
             }
         	<p>{errorMsg}</p>

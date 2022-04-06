@@ -27,14 +27,17 @@
     border: 0px;
     background-color: transparent;
     text-decoration: none;
+    margin-right: 15px;
 }
 .header-container 
 {
     display: flex;
     flex-direction: row;
-    justify-content: end;
+    justify-content: space-between;
     align-items: center;
-    padding-right: 5%;
+    
+    width: 28%;
+    margin-left: 8%;
 }
 .cart-text 
 {
@@ -54,13 +57,27 @@
 }
 .header 
 {
+    width: 90vw;
     display: flex;
     justify-content: space-between;
-    border-bottom: 2px solid rgb(243,243,243);
     padding-bottom: 15px;
     padding-left: 5%;
     align-items: center;
     margin-right: 50px;
+    z-index: -1;
+}
+.header-options 
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 50vw;
+}
+.cart-logout 
+{
+    width: 15vw;
+    display: flex;
+    justify-content: space-around;
 }
 
 .site-icon 
@@ -68,6 +85,7 @@
     height: 50px;
     margin-top: 15px;
     cursor: pointer;
+    margin-right: 15px;
 }
 
 .cart-count 
@@ -79,4 +97,35 @@
 .orders-button 
 {
     margin-right: 20vw;
+}
+.header-bg-container 
+{
+    display: flex;
+    justify-content: space-between;
+}
+.logout-container 
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 30px;
+}
+.logout 
+{
+    border: 0px;
+    height: 30px;
+    width: 80px;
+    background-color:orangered;
+    border-radius: 10px;
+    color: white;
+}
+.logout-btn 
+{
+    border: 0px;
+    background-color: #ff6161;
+    height: 30px;
+    width: 90px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
 }

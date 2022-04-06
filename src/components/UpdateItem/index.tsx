@@ -2,9 +2,12 @@ import { useState } from 'react'
 import './index.css'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
+import { Cookies } from 'typescript-cookie'
 
 
 const UpdateItem=(props:any)=>{
+
+
     const id=props.match.params.id
     console.log(id)
     const history=useHistory()
@@ -36,6 +39,7 @@ const UpdateItem=(props:any)=>{
               'accept':'application/json',
 
               'Access-Control-Allow-Origin':"*",
+              'Authorization':`bearer ${Cookies.get("jwt_token")}`
               
             },
             data:JSON.stringify(data)}).then((res)=>{

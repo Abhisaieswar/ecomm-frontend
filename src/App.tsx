@@ -1,20 +1,28 @@
 import React from 'react';
-import {Switch,Route} from 'react-router-dom';
+import {Switch,Route, Redirect} from 'react-router-dom';
 import './App.css';
 import Home from './components/Home';
-import UpdateItem from './components/UpdateItem';
+
 import NewProduct from './components/NewProduct';
-import Bot from './components/Bot';
+import ProtectedRoute from './components/ProtectedRoute';
+import Login from './components/Login';
+import Orders from './components/Orders';
+import Cart from './components/Cart';
+import OrderDetails from './components/OrderDetails';
 
-
+//<Route exact path="/login" component={Login}/>
+//<Redirect to="/not-found"/>
 
 const App:React.FC=()=>{
   return(
       <Switch>
-        <Route exact path='/' component={Home}/>
-        <Route exact path="/update/:id" component={UpdateItem}/>
-        <Route exact path="/newproduct/" component={NewProduct}/>
-        <Route exact path="/bot/" component={Bot}/>
+        <Route exact path="/login" component={Login}/>
+        <ProtectedRoute exact path='/' component={Home}/>
+        <ProtectedRoute exact path="/newproduct/" component={NewProduct}/>
+        <ProtectedRoute exact path="/orders" component={Orders}/>
+        <ProtectedRoute exact path="/cart" component={Cart}/>
+        <ProtectedRoute exact path="/orders/:id" component={OrderDetails}/>
+        <Redirect to="/not-found"/>
       </Switch>
   )
 }

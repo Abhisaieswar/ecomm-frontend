@@ -89,6 +89,16 @@
   cursor: pointer;
 }
 
+.add-cart-btn-out-stock 
+{
+  border: 0px;
+  height: 30px;
+  border-radius: 5px;
+  color: #c2c2c2;
+  border-color: #e0e0e0;
+  cursor: pointer;
+}
+
 .cart 
 {
   display: flex;
@@ -116,8 +126,193 @@
   margin: 20px;
   border: 0px;
   height: 30px;
-  width: 160px;
+  width: 110px;
   background-color: #fb641b;
   color: white;
   cursor: pointer;
+  border-radius: 5px;
+  margin-left: 40px;
+}
+
+.bot 
+{
+  position: fixed;
+  left: 91vw;
+  top: 90vh;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  height: 30px;
+  width: 60px;
+  border: 0px;
+  cursor: pointer;
+}
+
+.update-form 
+{
+    margin: 20px;
+    margin-top: 0px;
+}
+.close-popup
+{
+  font-weight: bold;
+  margin-left: 100%;
+  cursor: pointer;
+}
+
+.update-container
+{
+  border: 1px solid grey;
+  position: fixed;
+  left: 40vw;
+  top: 15vh;
+  height: 52vh;
+  width: 21vw;
+  background-color:#fff;
+  font-size: 12px;
+  padding-left: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 5px;
+}
+
+.bot-container 
+{
+  border: 1px solid grey;
+  position: fixed;
+  left: 69vw;
+  top: 33vh;
+  height: 55vh;
+  width: 25vw;
+  background-color: #fff;
+  font-size: 12px;
+  padding-left: 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-radius: 5px;
+  overflow: auto;
+}
+
+.bot-container1
+{
+  justify-content: flex-start;
+  padding-left: 10px;
+}
+
+.bot-container2
+{
+  margin-left: auto;
+  list-style-type: none;
+  padding-right: 10px;
+}
+
+.ul-container 
+{
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+.list-style-type
+{
+  list-style-type: none;
+}
+.list-style
+{
+  list-style-type: none;
+  background-color:lightgrey;
+  color:#fff;
+  padding: 10px;
+  width: 70%;
+  margin-left: 15px;
+  border-radius: 10px;
+  padding-right: 15px;
+}
+
+.user-msg 
+{
+  margin-left: auto;
+  background-color: purple;
+  color: white;
+  width: 30%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
+.bot-options-container 
+{
+  margin: 10px;
+  display: flex;
+  width: 70%;
+  flex-wrap: wrap;
+  padding-left: 15px;
+  padding-right: 10px;
+  color: black;
+  border-radius: 15px;
+  background-color: lightgray;
+  font-weight: bold;
+}
+
+.send-container 
+{
+  cursor: pointer;
+  width: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bot-option
+{
+  border-radius: 10px;
+  border: 2px solid lightblue;
+  height: 28px;
+  padding-bottom: 3px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 10px;
+  margin: 5px;
+  color: blue;
+  font-weight: bold;
+}
+
+.orders-list 
+{
+  list-style-type: none;
+}
+.icon 
+{
+  margin-left: 0px;
+  padding-left: 0px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.list-item
+{
+  border-bottom: 1px solid grey;
+  width: 100%;
+}
+.bot-msg-icon 
+{
+  height:30px;
+}
+.bot-input 
+{
+  width: 90%;
+  height: 30px;
+  border: 0px;
+  outline: none;
+  padding-left: 10px;
+}
+.bot-bottom 
+{
+  width: 100%;
+  display: flex;
+  border-top: 1px solid green;
 }

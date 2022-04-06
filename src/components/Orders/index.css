@@ -1,21 +1,29 @@
 .orders-bg-container 
 {
     display: flex;
-    justify-content: center;
-    align-items: center;
 }
+.order-cards 
+{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .li-item
 {
     list-style-type: none;
     margin-bottom: 10px;
+    margin-left: 25px;
 }
 .order-item-container 
 {
     display:  flex;
     flex-direction: column;
     border: 1px solid #c2c2c2;
-    width: 90vw;
+    width: 15w;
     padding: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    cursor: pointer;
 }
 
 .orders-img 
@@ -23,6 +31,12 @@
     height: 120px;
     width: 120px;
     margin-right: 20px;
+}
+
+.status-order 
+{
+    font-size: 13px;
+    font-weight: bold;
 }
 
 .above-section
@@ -50,3 +64,4 @@
     width: 120px;
     cursor: pointer;
 }
+

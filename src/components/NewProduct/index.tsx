@@ -1,6 +1,7 @@
 import { useState } from "react"
 import axios from "axios"
 import { useHistory } from "react-router-dom"
+import { Cookies } from "typescript-cookie"
 
 const NewProduct=()=>{
     const [brand,setBrand]=useState("")
@@ -11,6 +12,9 @@ const NewProduct=()=>{
     const [imageurl,setUrl]=useState("")
 
     const [valid,setValid]=useState<boolean>(false)
+
+    
+    
 
     const history=useHistory()
 
@@ -42,7 +46,8 @@ const NewProduct=()=>{
               'accept':'application/json',
 
               'Access-Control-Allow-Origin':"*",
-              
+              'Authorization':`bearer ${Cookies.get("jwt_token")}`
+
             },
             data:JSON.stringify(data)}).then((res)=>{
                 setBrand("")

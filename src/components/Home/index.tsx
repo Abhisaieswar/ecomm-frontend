@@ -1,40 +1,35 @@
-import {  useState } from "react"
+
 import Header from "../Header"
 import ProductsSection from "../ProductsSection"
-import Cart from "../Cart"
-import Orders from '../Orders'
 
-
+import './index.css'
 
 
 
 const Home=()=>{
 
-
     
     
-    const [activeTab,setActiveTab]=useState("products")
+    // const [activeTab,setActiveTab]=useState("products")
 
-    const renderBelowSection=()=>{
-        switch(activeTab)
-        {
-            case "cart": return <Cart/>
+    // const renderBelowSection=()=>{
+    //     switch(activeTab)
+    //     {
+    //         case "cart": return <Cart/>
 
-            case "products": return <ProductsSection/>
+    //         case "products": return <ProductsSection/>
 
-            case "orders":return <Orders/>
-        }
-    }
+    //         case "orders":return <Orders/>
+    //     }
+    // }
 
     
 
     return (
-        <div>
-            <Header change={setActiveTab}/>
-            {
-                renderBelowSection()
-            }
-        </div>
+        <>
+            <Header/>
+            <ProductsSection/>
+        </>
     )
 }
 
