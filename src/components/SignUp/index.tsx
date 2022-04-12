@@ -1,36 +1,27 @@
-import { Link } from 'react-router-dom'
-import { useState } from 'react'
-import './index.css'
-import { Redirect, useHistory } from 'react-router-dom'
-import { Cookies } from 'typescript-cookie'
+import { useState } from "react"
+import { useHistory } from "react-router-dom"
 
-
-const Login=()=>{
-    const token=Cookies.get("jwt_token")
-    console.log(".",token)
-    let r=false;
-
-    if(token!==undefined)
-    {
-        r=true;
-    }
-
-    const history=useHistory()
+const SignUp=()=>{
     const [username,setUsername]=useState("")
-    const [password,setPassword]=useState("")
+    const [password1,setPassword1]=useState("")
     const [err,setErr]=useState("")
     const [req,setReq]=useState("")
+    const [password2,setPassword2]=useState("")
+    
+    const history=useHistory()
 
     const validate=async(e:any)=>{
         e.preventDefault()
+
         const det={
             username,
-            password
+            password1
         }
-        if(username!=="" && password!=="")
+
+        if(username!=="" && password1!=="" && password2===password1)
         {
             setReq("")
-            const res=await fetch("http://localhost:3001/login/",{
+            const res=await fetch("http://localhost:3001/signup/",{
                 method: 'POST',
                 headers: {
                 'content-type': 'application/json',
@@ -39,11 +30,8 @@ const Login=()=>{
                 },
                 body:JSON.stringify(det)}
             )
-            console.log(res,"response")
-            const data=await res.json()
             if(res.status===200)
             {
-                Cookies.set("jwt_token",data.jwt_token)
                 setTimeout(() => {
                     history.replace("/")
                     window.location.reload()
@@ -51,30 +39,37 @@ const Login=()=>{
             }
             else 
             {
-                setErr("Invalid User")
+                setErr("UserName Already Exists")
             }
+        }
+        else if(password1!==password2)
+        {
+            setReq("")
+            setErr("passwords doesn't match")
         }
         else 
         {
             setReq("*Please enter all the fields")
+            setErr("")
         }
     }
 
     return (
-        <>
-        {
-            r && <Redirect to="/"/>
-        }
-        <div className='login-bg-container'>
+        <div className="login-bg-container">
             <form className="login-container" onSubmit={validate}>
                 <label htmlFor='username'>User Name</label>
                 
                 <input type="text" id="username" className='input-field-login' value={username} onChange={(e)=>setUsername(e.target.value)}/>
                 
-                <label htmlFor='password'>Password</label>
+                <label htmlFor='password1'>Password</label>
                 
-                <input type="password" id="password" className='input-field-login' value={password} onChange={(e)=>setPassword(e.target.value)}/>
-                <button type="submit" className='login-btn'>Login</button> 
+                <input type="password" id="password1" className='input-field-login' value={password1} onChange={(e)=>setPassword1(e.target.value)}/>
+                
+                <label htmlFor="password2">Confirm Password</label>
+
+                <input type="password" id="password2" className='input-field-login' value={password2} onChange={(e)=>setPassword2(e.target.value)}/>
+                
+                <button type="submit" className='login-btn'>SignUp</button> 
                 {
                     err!=="" && <p className='err-msg'>{err}</p>
                 }
@@ -82,10 +77,8 @@ const Login=()=>{
                     req!=="" && <p className='err-msg'>{req}</p>
                 }
             </form>
-            <p>New User?  <Link to="/signup">Sign Up</Link></p>
         </div>
-        </>
     )
 }
 
-export default Login
+export default SignUp

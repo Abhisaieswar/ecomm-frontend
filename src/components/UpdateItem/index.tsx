@@ -46,13 +46,8 @@ const UpdateItem=(props:any)=>{
                 console.log(res)
             }).catch((err)=>console.log(err));
         history.push("/")
-        // const options={
-        //     method:"POST",
-        //     body: JSON.stringify(data)
-        // }
     }
 
-    
     return (
         <div>
             <form onSubmit={updateDb} className="update-form">

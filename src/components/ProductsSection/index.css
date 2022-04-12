@@ -185,7 +185,7 @@
   top: 33vh;
   height: 55vh;
   width: 25vw;
-  background-color: #fff;
+  background:lightgrey;
   font-size: 12px;
   padding-left: 0px;
   display: flex;
@@ -213,24 +213,13 @@
 {
   display: flex;
   flex-direction: column;
-  overflow: auto;
+  width: 85%;
 }
 .list-style-type
 {
   list-style-type: none;
-}
-.list-style
-{
-  list-style-type: none;
-  background-color:lightgrey;
-  color:#fff;
-  padding: 10px;
   width: 70%;
-  margin-left: 15px;
-  border-radius: 10px;
-  padding-right: 15px;
 }
-
 .user-msg 
 {
   margin-left: auto;
@@ -240,7 +229,6 @@
   margin-bottom: 10px;
   padding: 10px;
   border-radius: 10px;
-  margin-right: 5px;
   margin-top: 5px;
 }
 
@@ -248,16 +236,17 @@
 {
   margin: 10px;
   display: flex;
-  width: 70%;
-  flex-wrap: wrap;
+  flex-direction: column;
+  width: 100%;
   padding-left: 15px;
   padding-right: 10px;
   color: black;
   border-radius: 15px;
-  background-color: lightgray;
+  background-color: #fff;
   font-weight: bold;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
-
 .send-container 
 {
   cursor: pointer;
@@ -269,16 +258,19 @@
 
 .bot-option
 {
-  border-radius: 10px;
-  border: 2px solid lightblue;
   height: 28px;
   padding-bottom: 3px;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 5px;
+  color:#3a4b67;
+  font-weight: 600;
   font-size: 10px;
-  margin: 5px;
-  color: blue;
   font-weight: bold;
+  border: 0px;
+  background-color: transparent;
+  width: 120px;
+  border-bottom: 1px solid grey;
+  width: 100%;
 }
 
 .orders-list 
@@ -297,10 +289,33 @@
 {
   border-bottom: 1px solid grey;
   width: 100%;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+.orders-bot 
+{
+  margin-left: 25px;
+  overflow: auto;
+  width: 87%;
+  padding-right: 15px;
 }
 .bot-msg-icon 
 {
   height:30px;
+}
+.bot-orders-list 
+{
+  list-style-type: none;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.update-user 
+{
+  margin-top: 10px;
 }
 .bot-input 
 {
@@ -315,4 +330,8 @@
   width: 100%;
   display: flex;
   border-top: 1px solid green;
+}
+.bot-resp 
+{
+  width: 70%;
 }

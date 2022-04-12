@@ -131,7 +131,7 @@ const OrderDetails=(props:any)=>{
                         </div>
                     </div>
                     <div className='below-section'>
-                        <p>Ordered on {new Date(order[0].ordereddate).getFullYear()} {months[new Date(order[0].ordereddate).getMonth()]} {new Date(order[0].ordereddate).getDate()} {new Date(order[0].ordereddate).getHours()}:{new Date(order[0].ordereddate).getMinutes()}:{new Date(order[0].ordereddate).getSeconds()}</p>
+                        <p>Ordered on: {new Date(order[0].ordereddate).getFullYear()} {months[new Date(order[0].ordereddate).getMonth()]} {new Date(order[0].ordereddate).getDate()} {new Date(order[0].ordereddate).getHours()}:{new Date(order[0].ordereddate).getMinutes()}:{new Date(order[0].ordereddate).getSeconds()}</p>
                         <p>Order Total: {order[0].totalamt}</p>
                     </div>
                 </div>

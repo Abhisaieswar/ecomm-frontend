@@ -30,11 +30,6 @@ const NewProduct=()=>{
             imageurl
         }
         
-
-        
-        
-            //await axios.post("http://localhost:3001/products/",JSON.stringify(data)).then((res)=>console.log(res)).catch((err)=>console.log(err))
-        
         if(brand!=="" && title!=="" && rating!=="" && price!=="" && quantity!=="" && imageurl!=="")
         {
             console.log(data,"//////")
@@ -63,7 +58,6 @@ const NewProduct=()=>{
         }
         else 
         {
-            //console.log("here")
             setValid(true)
         }
     }

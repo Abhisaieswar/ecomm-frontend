@@ -5,6 +5,7 @@ import { Cookies } from 'typescript-cookie'
 import { Timestamp } from 'typeorm'
 import Header from '../Header'
 import './index.css'
+import { v4 } from 'uuid'
 
 type ordersType={
     id:number,
@@ -43,24 +44,6 @@ const Orders=()=>{
         }).then((data)=>setOrders(data))
     },[])
 
-    // const returnMonth=(num:number)=>{
-    //     switch(num)
-    //     {
-    //         case 1:return "Jan"
-    //         case 2:return "Feb"
-    //         case 3:return "March"
-    //         case 4:return "Apr"
-    //         case 5:return "May"
-    //         case 6:return "Jun"
-    //         case 7:return "Jul"
-    //         case 8:return "Aug"
-    //         case 9:return "Sep"
-    //         case 10:return "Oct"
-    //         case 11:return "Nov"
-    //         case 12:return "Dec"
-    //     }
-    // }
-
     const len=orders.length===0
     return(
         <>
@@ -72,13 +55,8 @@ const Orders=()=>{
             <ul className='order-cards'>
             {
                 !len && orders.map(each=>{
-                    // console.log(each.ordereddate)
-                    //  const year=each.ordereddate.slice(0,4)
-                    //  const date=each.ordereddate.slice(8,10)
-                    //  const month=returnMonth(parseInt(each.ordereddate.slice(6,8)))
-                    
                     return(
-                        <li key={`each.id ${each.id}`} className="li-item">
+                        <li key={v4()} className="li-item">
                             <div className='order-item-container' onClick={()=>history.push(`/orders/${each.id}`)}>
                                 <img src={each.imageurl} alt="img" className='orders-img'/>
                                 <div>

@@ -1,27 +1,14 @@
 import './index.css'
 import { useHistory } from 'react-router-dom'
-//import {SiChatbot} from 'react-icons/si'
 import { Cookies } from 'typescript-cookie'
 import {FiSend} from 'react-icons/fi'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import {BiArrowBack} from 'react-icons/bi'
 import {BsFillChatLeftTextFill} from 'react-icons/bs'
-import {v4 as uuid, v4} from 'uuid'
+import {v4} from 'uuid'
 
-
-// const data=[
-//     {id:1,brand:"Manyavar",imageurl:"https://assets.ccbp.in/frontend/react-js/ecommerce/cloths-long-fork.png",price:62990,rating:3.2,title:"Embroidered Net Gown",quantity:12},
-//     {id:2,brand:"Samsung",imageurl:"https://assets.ccbp.in/frontend/react-js/ecommerce/appliances-washing-machine.png",price:22490,rating:4.5,title:"Front Load Machine",quantity:0},
-//     {id:3,brand:"Fossil",imageurl:"https://assets.ccbp.in/frontend/react-js/ecommerce/electronics-simple-belt-watch.png",price:14995,rating:4.3,title:"Collider Black Dial Men's Watch",quantity:3},
-//     {id:4,brand:"LG",imageurl:"https://assets.ccbp.in/frontend/react-js/ecommerce/appliances-ear-buds.png",price:13499,rating:4.4,title:"True Wireless Earbuds",quantity:5},
-//     {id:5,brand:"Titan",imageurl:"https://assets.ccbp.in/frontend/react-js/ecommerce/electronics-tatar-watch.png",price:11999,rating:4.3,title:"Maritime Men's Watch",quantity:20},
-//     {id:6,brand:"Fossil",imageurl:"https://assets.ccbp.in/frontend/react-js/ecommerce/electronics-simple-watch.png",price:10995,rating:4.1,title:"Neutra Analog Men's Watch",quantity:12},
-//     {id:7,brand:"Trendytap",imageurl:"https://assets.ccbp.in/frontend/react-js/ecommerce/toys-minnos.png",price:8600,rating:4.2,title:"Monsters Charm Toy",quantity:13},
-//     {id:8,brand:"Fossil",imageurl:"https://assets.ccbp.in/frontend/react-js/ecommerce/electronics-royal-black-watch.png",price:8122,rating:4.4,title:"Privateer Quartz Watch",quantity:23},
-//     {id:9,brand:"Fossil",imageurl:"https://assets.ccbp.in/frontend/react-js/ecommerce/electronics-royal-watch.png",price:6395,rating:3.8,title:"Chronograph black Watch",quantity:3},
-//     {id:10,brand:"MAONO",imageurl:"https://assets.ccbp.in/frontend/react-js/ecommerce/appliances-singing-mike.png",price:5555,rating:4.4,title:"Podcast Microphone",quantity:14},
-// ]
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 type ordersType={
     id:number,
@@ -55,13 +42,6 @@ const status={
     loading:"LOADING"
 }
 
-type userType={
-    name:string,
-    address:string,
-    phone:string,
-    id:number
-}
-
 type botMsg={
     msgType:string,
     end:string,
@@ -69,7 +49,6 @@ type botMsg={
 }
 
 const jwt_token=Cookies.get("jwt_token")
-console.log("token in home",jwt_token)
 
 const ProductsSection=()=>{
 
@@ -94,7 +73,6 @@ const ProductsSection=()=>{
     const [botInput,setBotInput]=useState("")
 
     const [botInputOrder,setBotInputOrder]=useState("")
-    const [orderId,setOrderId]=useState("")
 
     const [state,setState]=useState(status.initial)
     const [data1,setData]=useState<obj[]>([])
@@ -117,23 +95,27 @@ const ProductsSection=()=>{
 
     const [allorders,setAllorders]=useState<[] | ordersType[]>([])
 
-    const [userdet,setUserdet]=useState<[] | userType[]>([])
+    const [isBotOrdersEmpty,setIsBotOrdersEmpty]=useState(false)
 
     const [name,setName]=useState("")
     const [address,setAddress]=useState("")
     const [phone,setPhone]=useState("")
+    const [id,setId]=useState(1)
     
-    const history=useHistory()
-    console.log(botArray,"*")
+    const [botOrders,setBotOrders]=useState<[] | ordersType[]>([])
 
-    const updateUser=async()=>{
+    const [updateSuccess,setUpdateSuccess]=useState(false)
+
+    const updateUser=async(e:any)=>{
+        e.preventDefault()
         const d={
             name,
             address,
             phone,
-            id:userdet[0].id
+            id
         }
-        await axios(`http:localhost:3001/updateuser/`,{
+        
+        fetch(`http://localhost:3001/updateuser/${id}`,{
             method: 'PUT',
             headers: {
             'content-type': 'application/json',
@@ -142,8 +124,27 @@ const ProductsSection=()=>{
             'Access-Control-Allow-Origin':"*",
             'Authorization':`bearer ${Cookies.get("jwt_token")}`
             },
-            data:JSON.stringify(d)
+            body:JSON.stringify(d)
+        }).then(()=>{
+            setUpdateSuccess(true)
         })
+        .catch(()=>{
+            setUpdateSuccess(false)
+        })
+    }
+
+    const getBotOrder=async()=>{
+        const res=await fetch(`http://localhost:3001/getorder/${botInputOrder}`,options)
+        const data=await res.json()
+        setBotOrders(data)
+        if(data.length===0)
+        {
+            setIsBotOrdersEmpty(true)
+        }
+        else 
+        {
+            setIsBotOrdersEmpty(false)
+        }
     }
 
     const fetchProducts=async()=>{
@@ -160,29 +161,39 @@ const ProductsSection=()=>{
         }   
     }
 
-    useEffect(()=>{
-        setState(status.loading)
-        fetchProducts()
-        
+    const fetchCart=()=>{
         fetch("http://localhost:3001/getcart",options).then((res)=>{
             return res.json()
         }).then(data=>{
             setCart(data)
         })
+    }
+
+    const fetchUser=()=>{
+        fetch("http://localhost:3001/getuser",options).then((res)=>{
+            return res.json()
+        }).then(data=>{
+            setName(data[0].name)
+            setAddress(data[0].address)
+            setPhone(data[0].phone)
+            setId(data[0].id)
+        })
+    }
+
+    useEffect(()=>{
+
+        setState(status.loading)
+        fetchProducts()
+        fetchCart()
+        fetchUser()
 
     },[])
 
     const updateDb=async()=>{
         const p=parseInt(price)
         const r=parseFloat(rating)
-        const data={
-            brand,
-            title,
-            rating:r,
-            price:p,
-            quantity,
-            imageurl
-        }
+        const data={brand,title,rating:r,price:p,quantity,imageurl}
+
         axios(`http://localhost:3001/products/${updateId}`,{
             method: 'PUT',
             headers: {
@@ -193,14 +204,93 @@ const ProductsSection=()=>{
               'Authorization':`bearer ${Cookies.get("jwt_token")}`
               
             },
-            data:JSON.stringify(data)}).then((res)=>{
+            data:JSON.stringify(data)})
+            .then((res)=>{
                 console.log(res)
-        }).catch((err)=>console.log(err));
-        setUpdatePopup(false)
+            })
+            .catch((err)=>{
+                console.log(err)
+            });
+            setUpdatePopup(false)
+    }
+
+    const deleteItem:(p:number)=>void=async(p)=>
+    {
+        await axios(`http://localhost:3001/products/${p}`,{
+                method: 'DELETE',
+                headers: {
+                'content-type': 'application/json',
+                'accept':'application/json',
+
+                'Access-Control-Allow-Origin':"*",
+                'Authorization':`bearer ${Cookies.get("jwt_token")}`
+                }  
+            })
+            fetch("http://localhost:3001/",options).then((res)=>{
+                return res.json()
+            })
+            .then((resData)=>{
+                setData(resData)
+            })
+    }
+
+    const updateItem:(p:number)=>void=(p)=>{
+        setUpadateId(p)
+        setUpdatePopup(true)
+    }
+
+    const addToCart:(p:obj)=>void=(p)=>{
+        let flag=0
+        cart.map(eachItem=>{
+            console.log(p.title,eachItem.title)
+            if(p.title===eachItem.title)
+            {
+                flag=1
+            }
+            return eachItem
+        })
+        
+        const data={
+            id:p.id,
+            brand:p.brand,
+            imageurl:p.imageurl,
+            price:p.price,
+            rating:p.rating,
+            title:p.title,
+            quantity:p.quantity,
+            cartquantity:1
+        }
+
+        if(flag===0){
+            
+            console.log("inserting")
+            axios("http://localhost:3001/cart/",{
+                method: 'POST',
+                headers: {
+                'content-type': 'application/json',
+                'accept':'application/json',
+
+                'Access-Control-Allow-Origin':"*",
+                'Authorization':`bearer ${Cookies.get("jwt_token")}`
+                
+                },
+                data:JSON.stringify(data)}).then((res)=>console.log(res)).catch((err)=>console.log(err))
+            
+            setCart([...cart,{
+                id:p.id,
+                brand:p.brand,
+                imageurl:p.imageurl,
+                price:p.price,
+                rating:p.rating,
+                title:p.title,
+                quantity:p.quantity,
+                cartQty:1
+            }])
+        }
     }
 
     const renderProducts=()=>{
-        console.log(data1,"data1")
+
         return(
             <>
             <div className='products-container'>
@@ -208,6 +298,7 @@ const ProductsSection=()=>{
                 {
                     data1.map(each=>{
                         const inStock=each.quantity>0?true:false
+
                         return(
                         <li key={v4()} className="img-list">
                             <img src={each.imageurl} alt="img" className="prod-img"/>
@@ -229,83 +320,10 @@ const ProductsSection=()=>{
                                 </div>
                                 
                                 <div className='cart'>
-                                    <button type="button" className='add-cart-btn' onClick={()=>{
-                                            setUpadateId(each.id)
-                                            setUpdatePopup(true)
-                                        }}>Update</button>
-                                    <button type="button" className='add-cart-btn' onClick={async()=>{
-                                        await axios(`http://localhost:3001/products/${each.id}`,{
-                                            method: 'DELETE',
-                                            headers: {
-                                            'content-type': 'application/json',
-                                            'accept':'application/json',
-
-                                            'Access-Control-Allow-Origin':"*",
-                                            'Authorization':`bearer ${Cookies.get("jwt_token")}`
-                                            }  
-                                        })
-                                        fetch("http://localhost:3001/",options).then((res)=>{
-                                            return res.json()
-                                        })
-                                        .then((resData)=>{
-                                            setData(resData)
-                                        })
-                                    }
-                                    }>Delete</button>
+                                    <button type="button" className='add-cart-btn' onClick={()=>updateItem(each.id)}>Update</button>
+                                    <button type="button" className='add-cart-btn' onClick={()=>deleteItem(each.id)}>Delete</button>
                                     {
-                                        inStock && <button className='add-cart-btn' type='button'  
-                                        onClick={()=>{
-    
-                                            let flag=0
-                                            cart.map(eachItem=>{
-                                                console.log(each.title,eachItem.title)
-                                                if(each.title===eachItem.title)
-                                                {
-                                                    flag=1
-                                                    //return {...eachItem,cartQty:eachItem.cartQty+=1}
-                                                }
-                                                return eachItem
-                                            })
-                                            
-                                            const data={
-                                                id:each.id,
-                                                brand:each.brand,
-                                                imageurl:each.imageurl,
-                                                price:each.price,
-                                                rating:each.rating,
-                                                title:each.title,
-                                                quantity:each.quantity,
-                                                cartquantity:1
-                                            }
-
-                                            if(flag===0){
-                                                
-                                                console.log("inserting")
-                                                axios("http://localhost:3001/cart/",{
-                                                    method: 'POST',
-                                                    headers: {
-                                                    'content-type': 'application/json',
-                                                    'accept':'application/json',
-
-                                                    'Access-Control-Allow-Origin':"*",
-                                                    'Authorization':`bearer ${Cookies.get("jwt_token")}`
-                                                    
-                                                    },
-                                                    data:JSON.stringify(data)}).then((res)=>console.log(res)).catch((err)=>console.log(err))
-                                                
-                                                setCart([...cart,{
-                                                    id:each.id,
-                                                    brand:each.brand,
-                                                    imageurl:each.imageurl,
-                                                    price:each.price,
-                                                    rating:each.rating,
-                                                    title:each.title,
-                                                    quantity:each.quantity,
-                                                    cartQty:1
-                                                }])
-                                            }
-                                        }
-                                        }>Add to Cart</button> 
+                                        inStock && <button className='add-cart-btn' type='button' onClick={()=>{addToCart(each)}}>Add to Cart</button> 
                                     }
                                     {
                                             !inStock && <button type='button' className='add-cart-btn-out-stock' disabled>Add to cart</button>
@@ -343,8 +361,7 @@ const ProductsSection=()=>{
                         <br/>
                         <label htmlFor='rating'>RATING</label>
                         <br/>
-                        <input type="text" id="rating" value={rating} onChange={(e)=>{
-                            setRating(e.target.value)}}/>
+                        <input type="text" id="rating" value={rating} onChange={(e)=>{setRating(e.target.value)}}/>
                         <br/>
                         <label htmlFor='price'>PRICE</label>
                         <br/>
@@ -388,13 +405,11 @@ const ProductsSection=()=>{
                                                                 <button className='bot-option' onClick={async()=>{
                                                                     setBotpage("orderdet")
                                                                     }}>order details</button>
-                                                                <button className='bot-option' onClick={async()=>{
+                                                                <button className='bot-option' onClick={()=>{
                                                                     setBotpage("userdet")
-                                                                    await fetch("http://localhost:3001/getuser/",options).then(res=>res.json()).then(data=>{
-                                                                    console.log(data,"ffff")    
-                                                                    setUserdet(data)
-                                                                })
-                                                                    }}>user details</button>
+                                                                }   
+                                                                
+                                                            }>user details</button>
                                                                 <button className='bot-option' onClick={()=>{setBotpage("update")}}>update user details</button>
                                                             </div>
                                                             <p className='bot-options-container'>Please enter<br/> 1 for orders page<br/> 2 for cart page</p>
@@ -403,7 +418,7 @@ const ProductsSection=()=>{
                                                 }
                                                 else if(each.end==="bot" && each.msgType==="link")
                                                 {
-                                                    return (<p className='bot-options-container'><a href={each.msg}>{each.msg}</a></p>)
+                                                    return (<p className='bot-options-container bot-resp'><a href={each.msg}>{each.msg}</a></p>)
                                                 }
                                                 else if(each.end==="user" && each.msgType==="inputnum")
                                                 {
@@ -413,7 +428,7 @@ const ProductsSection=()=>{
                                                 else 
                                                 {
                                                     return(
-                                                        <p className='bot-options-container'>{each.msg}</p>
+                                                        <p className='bot-options-container bot-resp'>{each.msg}</p>
                                                     )
                                                 }
                                             })
@@ -457,18 +472,37 @@ const ProductsSection=()=>{
                         {
                             botpage==="orderdet" && 
                             <div className='bot-container'>
-                                <div onClick={()=>setBotpage("home")}>
+                                <div onClick={()=>setBotpage("home")} className="orders-bot">
                                     <BiArrowBack className='icon'/>
                                     <p>Please enter id of the order</p>
                                     <br/>
                                     {
-                                        orderId!=="" && <a href={`http:/localhost:3000/orders/${orderId}`}>{`http:/localhost:3000/orders/${orderId}`}</a>
+                                        botOrders.length!==0 &&
+                                        botOrders.map(each=>{
+                                            return (
+                                                <li key={v4()} className="bot-orders-list">
+                                                    <p>Title: {each.title}</p>
+                                                    <p>Brand: {each.brand}</p>
+                                                    <p>Ordered on: {new Date(each.ordereddate).getFullYear()} {months[new Date(each.ordereddate).getMonth()]} {new Date(each.ordereddate).getDate()} {new Date(each.ordereddate).getHours()}:{new Date(each.ordereddate).getMinutes()}:{new Date(each.ordereddate).getSeconds()}</p>
+                                                    <p>Title: {each.title}</p>
+                                                    <p>Brand: {each.brand}</p>
+                                                    <p>Price: ₹{each.price}</p>
+                                                    <p>Quantity: {each.quantity}</p>
+                                                    <p>Total Price: {each.price*each.quantity}</p>
+                                                </li>
+                                            )
+                                        })
+                                    }
+                                    
+                                    {
+                                        isBotOrdersEmpty && 
+                                        <p>No orders with given id</p>
                                     }
                                 </div>
                                 <div className='bot-bottom'>
                                     <input type="text" placeholder='Type your message here' value={botInputOrder} onChange={(e)=>setBotInputOrder(e.target.value)} className='bot-input'/>
-                                    <div className='send-container' onClick={()=>{
-                                        setOrderId(botInputOrder)
+                                    <div className='send-container' onClick={async()=>{
+                                        getBotOrder()
                                         setBotInputOrder("")
                                     }}>
                                         <FiSend/>
@@ -491,6 +525,7 @@ const ProductsSection=()=>{
                                                     <li className='list-item' key={v4()}>
                                                         <p>Brand: {eachOrder.brand}</p>
                                                         <p>Title: {eachOrder.title}</p>
+                                                        <a href={`http://localhost:3000/orders/${eachOrder.id}`} target="_blank" rel="noreferrer">Click here</a>
                                                     </li>
                                                 )
                                             })
@@ -505,9 +540,9 @@ const ProductsSection=()=>{
                                 <div onClick={()=>setBotpage("home")}>
                                     <BiArrowBack className='icon'/>
                                 </div>
-                                <p>Name: {userdet[0].name}</p>
-                                <p>Address: {userdet[0].address}</p>
-                                <p>Phone: {userdet[0].phone}</p>
+                                <p>Name: {name}</p>
+                                <p>Address: {address}</p>
+                                <p>Phone: {phone}</p>
                             </div>
                         }
 
@@ -536,7 +571,10 @@ const ProductsSection=()=>{
                                         setPhone(e.target.value)
                                     }}/>
                                     <br/>
-                                    <button type="submit">Update</button>
+                                    <button type="submit" className='update-user'>Update</button>
+                                    {
+                                        updateSuccess && <p>Updated Successfully!</p>
+                                    }
                                 </form>
                             </div>
                         }
